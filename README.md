@@ -69,5 +69,5 @@ LinkedIn: https://www.linkedin.com/in/mohammedsufiyanv/
 ⭐ If you find this project helpful, please give it a star!
 # 🔍 DetectAI: Hybrid Text Authenticity Detection System
 
-![DetectAI Dashboard](screenshot.png)
-<img src="screenshot.png" alt="DetectAI Dashboard" width="600">
+![DetectAI Dashboard](Screenshot 2025-12-15 001213.png)
+<img src="Screenshot 2025-12-15 001213.png" alt="DetectAI Dashboard" width="600">
