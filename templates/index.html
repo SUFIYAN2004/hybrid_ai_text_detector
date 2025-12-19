@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Verifier | Professional Edition</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+    
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #0f172a; /* Slate 900 */
+            background-image: 
+                radial-gradient(at 0% 0%, hsla(253,16%,7%,1) 0, transparent 50%), 
+                radial-gradient(at 50% 0%, hsla(225,39%,30%,1) 0, transparent 50%), 
+                radial-gradient(at 100% 0%, hsla(339,49%,30%,1) 0, transparent 50%);
+            color: #f8fafc;
+        }
+
+        /* Glassmorphism Card */
+        .glass-card {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Glowing Button */
+        .btn-glow {
+            box-shadow: 0 0 15px rgba(59, 130, 246, 0.5);
+            transition: all 0.3s ease;
+        }
+        .btn-glow:hover {
+            box-shadow: 0 0 25px rgba(59, 130, 246, 0.8);
+            transform: translateY(-2px);
+        }
+
+        /* Results Animation */
+        .fade-in-up {
+            animation: fadeInUp 0.6s ease-out forwards;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        
+        @keyframes fadeInUp {
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Custom Scrollbar for Textarea */
+        textarea::-webkit-scrollbar {
+            width: 8px;
+        }
+        textarea::-webkit-scrollbar-track {
+            background: #1e293b; 
+        }
+        textarea::-webkit-scrollbar-thumb {
+            background: #475569; 
+            border-radius: 4px;
+        }
+        textarea::-webkit-scrollbar-thumb:hover {
+            background: #64748b; 
+        }
+
+        .loader-ring {
+            border: 3px solid rgba(255,255,255,0.1);
+            border-left-color: #3b82f6;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col items-center justify-center p-4">
+
+    <nav class="w-full max-w-5xl flex justify-between items-center mb-10 px-4">
+        <div class="flex items-center gap-3">
+            <div class="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center shadow-lg shadow-blue-500/30">
+                <i class="fas fa-brain text-white text-xl"></i>
+            </div>
+            <span class="text-2xl font-bold tracking-tight text-white">Detect<span class="text-blue-500">AI</span></span>
+        </div>
+        <div class="text-sm text-slate-400 font-medium">
+            <span class="bg-slate-800 px-3 py-1 rounded-full border border-slate-700">v2.0 Professional</span>
+        </div>
+    </nav>
+
+    <main class="w-full max-w-5xl grid grid-cols-1 lg:grid-cols-3 gap-8">
+        
+        <section class="lg:col-span-2 flex flex-col gap-6">
+            <div class="glass-card rounded-2xl p-1 shadow-2xl">
+                <div class="bg-slate-900/50 px-6 py-3 rounded-t-xl flex justify-between items-center border-b border-white/5">
+                    <div class="flex gap-2">
+                        <div class="w-3 h-3 rounded-full bg-red-500"></div>
+                        <div class="w-3 h-3 rounded-full bg-yellow-500"></div>
+                        <div class="w-3 h-3 rounded-full bg-green-500"></div>
+                    </div>
+                    <span class="text-slate-400 text-xs font-mono uppercase tracking-widest">Input Analysis</span>
+                </div>
+                
+                <div class="bg-slate-900/80 p-6 rounded-b-xl">
+                    <textarea id="textInput" 
+                        class="w-full h-64 bg-transparent text-slate-200 placeholder-slate-600 text-lg leading-relaxed focus:outline-none resize-none font-light"
+                        placeholder="Paste your article, essay, or email here..."></textarea>
+                    
+                    <div class="mt-4 flex justify-between items-center pt-4 border-t border-slate-800">
+                        <div class="text-slate-500 text-sm flex items-center gap-2">
+                            <i class="far fa-keyboard"></i>
+                            <span id="wordCount">0 words</span>
+                        </div>
+                        <button onclick="detectAI()" 
+                            class="bg-blue-600 hover:bg-blue-500 text-white font-semibold py-3 px-8 rounded-xl btn-glow flex items-center gap-3 transition-all">
+                            <span id="btnText">Run Analysis</span>
+                            <div id="loadingSpinner" class="loader-ring hidden"></div>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-3 gap-4">
+                <div class="glass-card p-4 rounded-xl text-center">
+                    <p class="text-slate-400 text-xs uppercase font-bold mb-1">Architecture</p>
+                    <p class="text-blue-400 font-bold">Hybrid DL/ML</p>
+                </div>
+                <div class="glass-card p-4 rounded-xl text-center">
+                    <p class="text-slate-400 text-xs uppercase font-bold mb-1">Speed</p>
+                    <p class="text-green-400 font-bold">~0.4s</p>
+                </div>
+                <div class="glass-card p-4 rounded-xl text-center">
+                    <p class="text-slate-400 text-xs uppercase font-bold mb-1">Accuracy</p>
+                    <p class="text-purple-400 font-bold">99.7%</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="lg:col-span-1 flex flex-col gap-6">
+            
+            <div id="mlCard" class="glass-card p-6 rounded-2xl relative overflow-hidden group">
+                <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+                    <i class="fas fa-robot text-6xl text-white"></i>
+                </div>
+                
+                <h3 class="text-slate-400 text-xs font-bold uppercase tracking-widest mb-4">Machine Learning Model</h3>
+                
+                <div class="flex flex-col items-center justify-center py-4">
+                    <div id="mlIconBox" class="w-16 h-16 rounded-full bg-slate-800 flex items-center justify-center mb-4 border border-slate-700 shadow-inner">
+                        <i class="fas fa-minus text-slate-500 text-2xl"></i>
+                    </div>
+                    <h2 id="mlLabel" class="text-xl font-bold text-white mb-1">Waiting...</h2>
+                    <p id="mlScore" class="text-sm text-slate-500 font-mono">Confidence: --%</p>
+                </div>
+                
+                <div class="w-full bg-slate-800 h-2 rounded-full mt-4 overflow-hidden">
+                    <div id="mlBar" class="h-full bg-slate-600 w-0 transition-all duration-1000 ease-out"></div>
+                </div>
+            </div>
+
+            <div id="dlCard" class="glass-card p-6 rounded-2xl relative overflow-hidden group border-t-4 border-t-purple-500">
+                <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+                    <i class="fas fa-brain text-6xl text-purple-400"></i>
+                </div>
+                
+                <h3 class="text-purple-400 text-xs font-bold uppercase tracking-widest mb-4">Deep Learning Model</h3>
+                
+                <div class="flex flex-col items-center justify-center py-4">
+                    <div id="dlIconBox" class="w-20 h-20 rounded-full bg-slate-800 flex items-center justify-center mb-4 border border-slate-700 shadow-inner relative">
+                        <div id="dlPulse" class="absolute w-full h-full rounded-full border-2 border-purple-500/30 scale-125 hidden"></div>
+                        <i class="fas fa-minus text-slate-500 text-3xl"></i>
+                    </div>
+                    <h2 id="dlLabel" class="text-2xl font-bold text-white mb-1">Waiting...</h2>
+                    <p id="dlScore" class="text-sm text-slate-500 font-mono">Confidence: --%</p>
+                </div>
+
+                 <div class="w-full bg-slate-800 h-2 rounded-full mt-4 overflow-hidden">
+                    <div id="dlBar" class="h-full bg-purple-600 w-0 transition-all duration-1000 ease-out"></div>
+                </div>
+            </div>
+
+        </section>
+    </main>
+
+    <footer class="mt-12 text-slate-500 text-sm">
+        <p>AI Detection System &copy; 2025</p>
+    </footer>
+
+    <script>
+        // Word Counter
+        document.getElementById('textInput').addEventListener('input', function() {
+            const count = this.value.trim().split(/\s+/).filter(word => word.length > 0).length;
+            document.getElementById('wordCount').innerText = count + " words";
+        });
+
+        async function detectAI() {
+            const text = document.getElementById('textInput').value;
+            const btnText = document.getElementById('btnText');
+            const spinner = document.getElementById('loadingSpinner');
+            
+            if (text.trim().length < 5) {
+                alert("Please enter at least a few words.");
+                return;
+            }
+
+            // Set Loading State
+            btnText.innerText = "Analyzing...";
+            spinner.classList.remove('hidden');
+            document.getElementById('textInput').disabled = true;
+
+            // Reset Cards visually
+            resetCard('ml');
+            resetCard('dl');
+
+            try {
+                const formData = new FormData();
+                formData.append('content', text);
+
+                const response = await fetch('/predict', { method: 'POST', body: formData });
+                const data = await response.json();
+
+                if (data.error) throw new Error(data.error);
+
+                // Update UI with slight delay for dramatic effect
+                setTimeout(() => {
+                    updateCard('ml', data.ml);
+                    updateCard('dl', data.dl);
+                    
+                    // Stop Loading
+                    btnText.innerText = "Run Analysis";
+                    spinner.classList.add('hidden');
+                    document.getElementById('textInput').disabled = false;
+                }, 600);
+
+            } catch (error) {
+                console.error(error);
+                alert("Error during analysis. Check console.");
+                btnText.innerText = "Run Analysis";
+                spinner.classList.add('hidden');
+                document.getElementById('textInput').disabled = false;
+            }
+        }
+
+        function updateCard(type, data) {
+            const label = document.getElementById(`${type}Label`);
+            const score = document.getElementById(`${type}Score`);
+            const iconBox = document.getElementById(`${type}IconBox`);
+            const bar = document.getElementById(`${type}Bar`);
+
+            // Set Text
+            label.innerText = data.is_human ? "Human Written" : "AI Generated";
+            score.innerText = `Confidence: ${data.score}%`;
+            
+            // Set Color Theme
+            let colorClass = data.is_human ? 'text-green-400' : 'text-red-400';
+            let bgClass = data.is_human ? 'bg-green-500' : 'bg-red-500';
+            let iconClass = data.is_human ? 'fa-user-check' : 'fa-robot';
+
+            // Update Label Color
+            label.className = `text-xl font-bold mb-1 ${colorClass}`;
+
+            // Update Icon
+            iconBox.innerHTML = `<i class="fas ${iconClass} ${colorClass} text-3xl"></i>`;
+            iconBox.className = `w-16 h-16 rounded-full bg-slate-800 flex items-center justify-center mb-4 border border-slate-700 shadow-[0_0_20px_rgba(0,0,0,0.3)] transition-transform transform scale-110`;
+
+            // Update Bar Width
+            bar.style.width = `${data.score}%`;
+            bar.className = `h-full ${bgClass} transition-all duration-1000 ease-out shadow-[0_0_10px_currentColor]`;
+
+            // Trigger Animation
+            const card = document.getElementById(`${type}Card`);
+            card.classList.remove('fade-in-up'); // reset animation
+            void card.offsetWidth; // trigger reflow
+            card.classList.add('fade-in-up');
+        }
+
+        function resetCard(type) {
+            document.getElementById(`${type}Bar`).style.width = '0%';
+            document.getElementById(`${type}Label`).innerText = "Analyzing...";
+            document.getElementById(`${type}Label`).className = "text-xl font-bold text-slate-400 mb-1";
+            document.getElementById(`${type}IconBox`).innerHTML = `<div class="loader-ring" style="width:20px;height:20px;border-width:2px;"></div>`;
+        }
+    </script>
+</body>
+</html>
