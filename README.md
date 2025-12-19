@@ -67,9 +67,7 @@ Mohammed Sufiyan
 LinkedIn: https://www.linkedin.com/in/mohammedsufiyanv/
 
 ⭐ If you find this project helpful, please give it a star!
+# 🔍 DetectAI: Hybrid Text Authenticity Detection System
 
-
-### 🎨 Finishing Touches:
-1.  **Add a Screenshot:** I highly recommend taking the image from **Page 5** of your PDF and saving it as `screenshot.png` in your repo. Then, add `![DetectAI Screenshot](screenshot.png)` at the top of the README.
-2.  **Add your LinkedIn Link:** This connects your GitHub directly to the LinkedIn article we wrote earlier.
-**Would you like me to help you create a professional "About Me" section for your GitHub profile as
+![DetectAI Dashboard](screenshot.png)
+<img src="screenshot.png" alt="DetectAI Dashboard" width="600">
