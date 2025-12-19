@@ -43,3 +43,33 @@ DetectAI is a dual-model system designed to verify if a text is **human-written*
    ```bash
    git clone [https://github.com/SUFIYAN2004/hybrid_ai_text_detector.git](https://github.com/SUFIYAN2004/hybrid_ai_text_detector.git)
    cd hybrid_ai_text_detector
+  
+2. Install dependencies:
+```bash
+pip install -r requirements.txt
+```
+
+3. Run the application:
+```bash
+python app.py
+
+```
+Access the app at http://127.0.0.1:5000
+
+🔮 Future Enhancements
+[ ] Implement an Ensemble Score to combine ML and DL results.
+[ ] Add Document Upload (.pdf, .docx) support.
+[ ] Multilingual detection capabilities.
+[ ] User authentication and history tracking.
+
+👤 Author
+Mohammed Sufiyan
+LinkedIn: https://www.linkedin.com/in/mohammedsufiyanv/
+
+⭐ If you find this project helpful, please give it a star!
+
+
+### 🎨 Finishing Touches:
+1.  **Add a Screenshot:** I highly recommend taking the image from **Page 5** of your PDF and saving it as `screenshot.png` in your repo. Then, add `![DetectAI Screenshot](screenshot.png)` at the top of the README.
+2.  **Add your LinkedIn Link:** This connects your GitHub directly to the LinkedIn article we wrote earlier.
+**Would you like me to help you create a professional "About Me" section for your GitHub profile as
